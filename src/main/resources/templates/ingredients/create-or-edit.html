@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi nuovo ingrediente</title>
+    <!-- Import Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <main>
+        <div th:insert="fragments/navbar :: navbar"></div>
+        <div class="container">
+            <div class="my-5 text-center" th:if="${edit}">
+                <h1>Aggiorna [[${ingredient.name}]]</h1>
+            </div>
+            <div class="my-5 text-center" th:unless="${edit}">
+                <h1>Inserisci nuovo ingrediente </h1>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <form th:action="${edit} ? @{|/ingredients/edit/${ingredient.id}|} : @{/ingredients/create}" method="post" id="form-ingredient" th:object="${ingredient}" class="mb-2">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="mb-3">
+                            <label class="form-label" for="name">Nome</label>
+                            <input class="form-control " type="text" id="name" th:field="*{name}"
+                            th:errorClass="is-invalid">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}">
+                                <ul>
+                                    <li th:each="error : ${#fields.errors('name')}"
+                                th:text="${error}"></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="allergen">Allergeni</label>
+                            <input class="form-control " type="text" id="allergen" th:field="*{allergen}"
+                            th:errorClass="is-invalid">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('allergen')}">
+                                <ul>
+                                    <li th:each="error : ${#fields.errors('allergen')}"
+                                th:text="${error}"></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="price">Prezzo in aggiunta</label>
+                            <input class="form-control " type="number" step="0.01" min="0"
+                            placeholder="€" id="price" th:field="*{price} "
+                            th:errorClass="is-invalid">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}">
+                                <ul>
+                                    <li th:each="error : ${#fields.errors('price')}"
+                                th:text="${error}"></li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">Salva</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
