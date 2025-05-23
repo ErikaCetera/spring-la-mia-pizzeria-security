@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -23,39 +24,42 @@ public WebSecurityCustomizer webSecurityCustomizer() {
 
 
 @Bean
-SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http
         .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/home").permitAll() // Permette l'accesso libero alla homepage
-            .requestMatchers("/pizze/create", "/pizze/edit/**").hasAuthority("ADMIN")
+            // Accesso libero alla homepage
+            .requestMatchers("/home").permitAll()
+
+            // Solo gli ADMIN possono eseguire operazioni di modifica
             .requestMatchers(HttpMethod.POST, "/pizze/**").hasAuthority("ADMIN")
-            .requestMatchers("/offers", "/offers/**").hasAnyAuthority("USER", "ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/pizze/**").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/pizze/**").hasAuthority("ADMIN")
+
             .requestMatchers(HttpMethod.POST, "/offers/**").hasAuthority("ADMIN")
             .requestMatchers(HttpMethod.PUT, "/offers/**").hasAuthority("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/offers/**").hasAuthority("ADMIN")
-            .requestMatchers("/ingredient", "/ingredient/**").hasAnyAuthority("USER", "ADMIN")
-            .requestMatchers(HttpMethod.POST, "/ingredienti/**").hasAuthority("ADMIN")
-            .requestMatchers(HttpMethod.PUT, "/ingredienti/**").hasAuthority("ADMIN")
-            .requestMatchers(HttpMethod.DELETE, "/ingredienti/**").hasAuthority("ADMIN")
-            .anyRequest().authenticated() // Qualsiasi altra richiesta richiede autenticazione
+
+            .requestMatchers(HttpMethod.POST, "/ingredient/**").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/ingredient/**").hasAuthority("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/ingredient/**").hasAuthority("ADMIN")
+
+            // Gli USER possono accedere alle risorse senza modificarle
+            .requestMatchers("/pizze/**", "/offers/**", "/ingredient/**").hasAnyAuthority("USER", "ADMIN")
+
+            .anyRequest().authenticated()
         )
-        .formLogin(form -> form
-            .loginPage("/login") // Pagina di login personalizzata
-            .permitAll()
-        )
+        .formLogin(Customizer.withDefaults())
         .logout(logout -> logout
             .logoutUrl("/logout")
             .logoutSuccessUrl("/")
             .invalidateHttpSession(true)
             .deleteCookies("JSESSIONID")
         )
-        .exceptionHandling(ex -> ex
-            .accessDeniedPage("/access-denied") // Pagina per accesso negato
-        )
+        .exceptionHandling(ex -> ex.accessDeniedPage("/access-denied"))
         .build();
-}
+    }
 
-
+@Bean
 // @SuppressWarnings("deprecation")
 DaoAuthenticationProvider authenticationProvider(){
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

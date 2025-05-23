@@ -22,7 +22,7 @@
                     <input type="text" name="name" placeholder="cerca qui la tua pizza.." class="form-control">
                     <button type="submit" class="btn btn-primary">cerca</button>
                 </form>
-                <a th:href="@{/pizze/create}" class="btn btn-primary">Crea nuova pizza</a>
+                <a th:href="@{/pizze/create}" class="btn btn-primary" sec:authorize="hasAuthority('ADMIN')">Crea nuova pizza</a>
             </div>
 
             <div class="row" th:if="${pizze.size() > 0}">
@@ -36,9 +36,9 @@
                         <div class="d-flex justify-content-around">
                             <a th:href="@{/pizze/{id}(id=${pizza.id})}" class="btn btn-primary m-2  btn-sm">Dettagli</a>
                             <a th:href="@{/pizze/edit/{id}(id=${pizza.id})}"
-                                class="btn btn-success m-2 btn-sm">Modifica</a>
+                                class="btn btn-success m-2 btn-sm" sec:authorize="hasAuthority('ADMIN')">Modifica</a>
                             <button type="button" class="btn btn-danger m-2 btn-sm"  data-bs-toggle="modal"
-                                th:data-bs-target="'#delete-modal-' + ${pizza.id}">
+                                th:data-bs-target="'#delete-modal-' + ${pizza.id}" sec:authorize="hasAuthority('ADMIN')">
                                 Elimina
                             </button>
                         </div>

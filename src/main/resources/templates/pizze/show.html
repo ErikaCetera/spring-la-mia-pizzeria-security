@@ -51,7 +51,7 @@
                                 <td>[[*{startOffer}]]</td>
                                 <td>[[*{endOffer}]]</td>
                                 <td>
-                                <a class="btn btn-warning btn-sm" th:href="@{|/offers/edit/${offer.id}|}">Modifica</a>
+                                <a class="btn btn-warning btn-sm" th:href="@{|/offers/edit/${offer.id}|}"  sec:authorize="hasAuthority('ADMIN')">Modifica</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -59,7 +59,7 @@
                 </div>
 
                 <div >
-                    <a th:href="@{/pizze/{id}/offer(id=${pizza.id})}" class="btn btn-success btn-sm">Aggiungi offerta
+                    <a th:href="@{/pizze/{id}/offer(id=${pizza.id})}" class="btn btn-success btn-sm"  sec:authorize="hasAuthority('ADMIN')">Aggiungi offerta
                         speciale</a>
                 </div>
             </section>

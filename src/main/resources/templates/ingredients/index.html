@@ -23,7 +23,7 @@
                         <input type="text" name="name" placeholder="cerca ingrediente.." class="form-control">
                         <button type="submit" class="btn btn-primary">cerca</button>
                     </form>
-                    <a th:href="@{/ingredients/create}" class="btn btn-primary">Aggiungi nuovo ingrediente</a>
+                    <a th:href="@{/ingredients/create}" class="btn btn-primary"  sec:authorize="hasAuthority('ADMIN')">Aggiungi nuovo ingrediente</a>
                 </div>
             </section>
 
@@ -37,18 +37,18 @@
                             <th>Nome</th>
                             <th>Allergeni</th>
                             <th>Prezzo</th>
-                            <th></th>
-                            <th></th>
+                            <th  sec:authorize="hasAuthority('ADMIN')"></th>
+                            <th  sec:authorize="hasAuthority('ADMIN')"></th>
                         </thead>
                         <tbody>
                             <tr th:each="ingredient : ${ingredients}" th:object="${ingredient}">
                                 <td>[[*{name}]]</td>
                                 <td>[[*{allergen}]]</td>
                                 <td>[[*{price}]]</td>
-                                <td>
-                                    <a th:href="@{|/ingredients/edit/${ingredient.id}|}" class="btn btn-warning m-2 btn-sm">Modifica</a>
+                                <td  sec:authorize="hasAuthority('ADMIN')">
+                                    <a th:href="@{|/ingredients/edit/${ingredient.id}|}" class="btn btn-warning m-2 btn-sm" >Modifica</a>
                                 </td>
-                                <td>
+                                <td  sec:authorize="hasAuthority('ADMIN')">
                                     <button type="button" class="btn btn-danger m-2 btn-sm" data-bs-toggle="modal"
                                         th:data-bs-target="'#delete-modal-' + ${ingredient.id}">
                                         Elimina
