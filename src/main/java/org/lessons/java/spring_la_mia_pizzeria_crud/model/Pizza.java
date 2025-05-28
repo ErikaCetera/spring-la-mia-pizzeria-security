@@ -36,7 +36,7 @@ public class Pizza {
     private BigDecimal price;
 
     //aggiunta relazione tra una pizza e 0, 1 o più offerte
-    @OneToMany(mappedBy = "pizza", cascade = {CascadeType.REMOVE}) //basato su una sola pizza
+    @OneToMany(mappedBy = "pizza")
     private List<Offer> offers;
 
     @ManyToMany

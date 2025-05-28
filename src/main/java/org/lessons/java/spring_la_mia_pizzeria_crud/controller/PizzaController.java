@@ -28,8 +28,6 @@ public class PizzaController {
     @Autowired
     private PizzaService pizzaService;
     @Autowired
-    private OfferRepository offerRepository;
-    @Autowired
     private IngredientRepository ingredientRepository;
 
     @GetMapping
@@ -95,9 +93,6 @@ public class PizzaController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         Pizza pizza = pizzaService.getById(id);
-        for(Offer offerToDelete : pizza.getOffers()){
-            offerRepository.delete(offerToDelete);
-        }
         pizzaService.delete(pizza);
         return "redirect:/pizze";
     }
