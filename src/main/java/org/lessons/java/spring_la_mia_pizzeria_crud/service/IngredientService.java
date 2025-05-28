@@ -61,11 +61,7 @@ public class IngredientService {
     }
 
     public void delete(Ingredient ingredient) {
-    for (Pizza pizza : ingredient.getPizze()) {
-        pizza.getIngredients().remove(ingredient);
-        pizzaRepository.save(pizza);
-    }
-    ingredientRepository.delete(ingredient);
+    deleteById(ingredient.getId());
 }
 
 }

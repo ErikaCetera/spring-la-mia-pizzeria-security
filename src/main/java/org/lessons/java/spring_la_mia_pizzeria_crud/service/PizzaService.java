@@ -27,10 +27,9 @@ public class PizzaService {
         return pizzaRepository.findAll(Sort.by("name"));
     }
 
-    public Optional<Pizza> findById(Integer id){
+    public Optional<Pizza> findById(Integer id) {
         return pizzaRepository.findById(id);
     }
-
 
     public Pizza getById(Integer id) {
         Optional<Pizza> pizzaAttempt = pizzaRepository.findById(id);
@@ -54,28 +53,24 @@ public class PizzaService {
         return pizzaRepository.save(pizza);
     }
 
-    public void delete(Pizza pizza){
-        for(Offer offerToDelete : pizza.getOffers()){
-            offerRepository.delete(offerToDelete);
-        }
-        pizzaRepository.delete(pizza);
-    }
-
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         Pizza pizza = getById(id);
-        for(Offer offerToDelete : pizza.getOffers()){
+        for (Offer offerToDelete : pizza.getOffers()) {
             offerRepository.delete(offerToDelete);
         }
         pizzaRepository.delete(pizza);
     }
 
-    public Boolean existsById(Integer id){
+    public void delete(Pizza pizza) {
+        deleteById(pizza.getId());
+    }
+
+    public Boolean existsById(Integer id) {
         return pizzaRepository.existsById(id);
     }
 
-    public Boolean exists(Pizza pizza){
+    public Boolean exists(Pizza pizza) {
         return existsById(pizza.getId());
     }
-
 
 }

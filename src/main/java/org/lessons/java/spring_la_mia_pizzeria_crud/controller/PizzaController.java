@@ -42,6 +42,7 @@ public class PizzaController {
     public String show(Model model, @PathVariable("id") Integer id) {
         Pizza pizza = pizzaService.getById(id);
         model.addAttribute("pizza", pizza);
+        model.addAttribute("ingredients", pizza.getIngredients());
         return "pizze/show";
     }
 

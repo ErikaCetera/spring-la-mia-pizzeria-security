@@ -23,15 +23,19 @@
                             <img th:src="${pizza.image}" class="card-img-top mx-auto " th:alt="${pizza.name}"
                                 style="width:300px;" />
                             <div class="card-body">
-                                <p th:text="'Ingredienti:  ' + ${pizza.description}"></p>
-                                <p th:text="'Prezzo: ' + ${pizza.price} + '€'"></p>
+                                <p class="fw-bold">Ingredienti:</p>
+                                <ul class="list-group">
+                                    <li class="list-group-item" th:each="ingredient : ${ingredients}" th:text="${ingredient.name}"></li>
+                                </ul>
+
+                                <p class="my-3 fw-bold" th:text="'Prezzo: ' + ${pizza.price} + '€'"></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            
+
             <section>
                 <div class="col" th:unless="${pizza.getOffers().size() > 0}">
                     <h5>Nessuna offerta speciale presente</h5>
@@ -51,15 +55,17 @@
                                 <td>[[*{startOffer}]]</td>
                                 <td>[[*{endOffer}]]</td>
                                 <td>
-                                <a class="btn btn-warning btn-sm" th:href="@{|/offers/edit/${offer.id}|}"  sec:authorize="hasAuthority('ADMIN')">Modifica</a>
+                                    <a class="btn btn-warning btn-sm" th:href="@{|/offers/edit/${offer.id}|}"
+                                        sec:authorize="hasAuthority('ADMIN')">Modifica</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div >
-                    <a th:href="@{/pizze/{id}/offer(id=${pizza.id})}" class="btn btn-success btn-sm"  sec:authorize="hasAuthority('ADMIN')">Aggiungi offerta
+                <div>
+                    <a th:href="@{/pizze/{id}/offer(id=${pizza.id})}" class="btn btn-success btn-sm"
+                        sec:authorize="hasAuthority('ADMIN')">Aggiungi offerta
                         speciale</a>
                 </div>
             </section>
